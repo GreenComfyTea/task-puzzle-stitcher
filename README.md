@@ -41,7 +41,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 1. Canvas panning and zooming;
 2. Canvas autoresizing on window resize;
-3. Image format combobox is saved across sessions in `Local Storage`.
+3. Selected image format is saved across sessions in `Local Storage`.
 
 ## Issues:
 
