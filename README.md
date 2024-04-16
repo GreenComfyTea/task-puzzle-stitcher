@@ -64,11 +64,11 @@ const t1 = performance.now();
 console.log(`${(t1 -t0)} ms`);
 ```
 
-`PNG String`: 55 ms
-`PNG Uint8ClampedArray`: 97 ms
+`PNG String`: 55 ms  
+`PNG Uint8ClampedArray`: 97 ms  
 `JPG String`: 3485 ms  
-`JPG Uint8ClampedArray`: 3977 ms
-
-`PNG BinarySearch()`: 55 ms
+`JPG Uint8ClampedArray`: 3977 ms  
+  
+`PNG BinarySearch()`: 55 ms  
 `PNG Array.prototype.find()`: 537 ms
 
