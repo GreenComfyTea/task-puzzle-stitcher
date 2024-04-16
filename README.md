@@ -26,7 +26,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 1. Load all images;
 2. Get pixel edges for each image;
-3. `png only` Convert each edge to a string (measurements showed that searching and comparisons with strings turned out to be faster that the same with integers (possibly, due to jit?));
+3. Convert each edge to a string (measurements showed that searching and comparisons with strings turned out to be faster that the same with integers (possibly, due to jit?));
 4. `png only` Create 4 lists containing all images, but each list is sorted differently: leftList, topList, rightList, bottomList. LeftList is sorted by top edge strings, and so on.
 
 ### Solving:
@@ -47,4 +47,32 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 1. Both png and jpg algorithms are not safe from collisions;
 2. `jpg` processing is 64 times slower than `png` processing.
+
+## Measurements:
+
+```JS
+const t0 = performance.now();
+
+for(let i = 0; i < 100; i++) {
+	this.findTopLeftPuzzlePiece();
+	this.findLeftMostPuzzlePieces();
+	this.findPuzzlePiecesRowByRow();
+}
+
+const t1 = performance.now();
+
+console.log(`${(t1 -t0)} ms`);
+
+
+this.drawSolvedPuzzle();
+
+```
+
+`PNG String`: 55 ms
+`PNG Uint8ClampedArray`: 97 ms
+`JPG String`: 3485 ms  
+`JPG Uint8ClampedArray`: 3977 ms
+
+`PNG BinarySearch()`: 55 ms
+`PNG Array.prototype.find()`: 537 ms
 
