@@ -45,18 +45,18 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 `jpg only` Due to jpg being lossy, I can't compare edges directly. Instead hamming distance is calculated.  
 3. Fill each row  top to bottom, left to right, by comparing image candidate left edge string to the left image's right edge string. Same approach as in step 2.
 
-## Additional Features:
+## Additional Features
 
 1. Canvas panning and zooming;
 2. Canvas autoresizing on window resize;
 3. Selected image format is saved across sessions in `Local Storage`.
 
-## Issues:
+## Issues
 
 1. Both png and jpg algorithms are not safe from collisions;
 2. `jpg` processing is 63 times slower than `png` processing.
 
-## Measurements:
+## Measurements
 
 ```JS
 const t0 = performance.now();
