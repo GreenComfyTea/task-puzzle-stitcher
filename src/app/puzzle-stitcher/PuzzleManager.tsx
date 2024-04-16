@@ -4,8 +4,6 @@ import Konva from "konva";
 import PuzzlePiece from './PuzzlePiece';
 
 class PuzzleManager {
-	static isInstantiated: boolean = false;
-
 	public puzzleSize: number = 16;
 
 	private maxPuzzlePieceWidth: number = 241;
@@ -14,6 +12,10 @@ class PuzzleManager {
 	private puzzleSpacing: number = 3;
 
 	private layer: Konva.Layer;
+
+	private imageFolder: string = "peaces"; // sic!
+	private imageFormat: string = "png";
+	private isPng: boolean = true;
 
 	private puzzlePieces: PuzzlePiece[] = [];
 	private leftList: PuzzlePiece[] = [];
@@ -25,39 +27,31 @@ class PuzzleManager {
 
 	private solvedPuzzlePieces: PuzzlePiece[][] = [...Array(this.puzzleSize)].map(e => Array(this.puzzleSize));
 
-	constructor(layer: Konva.Layer) {
+	constructor(layer: Konva.Layer, imageFormat: string) {
 		this.layer = layer;
+		this.imageFormat = imageFormat;
 
-		PuzzleManager.isInstantiated = true;
+		if("jpg".localeCompare(imageFormat) === 0) {
+			this.imageFolder = "peaces_extra"; // sic!
+			this.isPng = false;
+		}
 	}
 
-	public loadImages(imageFormat: string, callback: Function) {
-		// sic!
-		let imageFolder = "jpg".localeCompare(imageFormat) === 0 ? "peaces_extra" : "peaces";
-
-		console.log("loading: ", imageFolder, imageFormat);
-
+	public loadImages(callback: Function) {
 		for(let i = 0; i < this.puzzlePieceCount; i++) {
-			let image = this.loadImage(imageFolder, imageFormat, i, callback);
+			let image = this.loadImage(i, callback);
 		}
 	}
 
 	public solve() {
-		let t0 = performance.now();
-		for(let i = 0; i < 1; i++) {
-			this.findTopLeftPuzzlePiece();
-			this.findLeftMostPuzzlePieces();
-			this.findPuzzlePiecesRowByRow();
-		}
-		
-		let t1 = performance.now();
-
-		console.log(`strings: ${(t1 - t0).toFixed(3)} ms`);
+		this.findTopLeftPuzzlePiece();
+		this.findLeftMostPuzzlePieces();
+		this.findPuzzlePiecesRowByRow();
 
 		this.drawSolvedPuzzle();
 	}
 
-	private loadImage(imageFolder: string, imageFormat: string, index: number, callback: Function) {
+	private loadImage(index: number, callback: Function) {
 		const puzzlePieceImage: HTMLImageElement = new Image();
 		const puzzleManager = this;
 
@@ -78,7 +72,7 @@ class PuzzleManager {
 			puzzleManager.loadedPuzzlePieceCount++;
 			puzzleManager.onAllPuzzlePiecesLoaded(callback);
 		};
-		puzzlePieceImage.src = `/${imageFolder}/peace-${index}.${imageFormat}`;
+		puzzlePieceImage.src = `/${this.imageFolder}/peace-${index}.${this.imageFormat}`;
 	}
 
 	private onAllPuzzlePiecesLoaded(callback: Function) {
@@ -90,6 +84,8 @@ class PuzzleManager {
 		this.topList =  [...this.puzzlePieces];
 		this.rightList =  [...this.puzzlePieces];
 		this.bottomList =  [...this.puzzlePieces];
+
+		if(!this.isPng) return;
 
 		this.leftList.sort((left, right) => left.leftCache.localeCompare(right.leftCache));
 		this.topList.sort((left, right) => left.topCache.localeCompare(right.topCache));
@@ -112,7 +108,9 @@ class PuzzleManager {
 
 	private findLeftMostPuzzlePieces() {
 		for(let y = 1; y < this.puzzleSize; y++) {
-			const puzzlePiece = PuzzleManager.binarySearch(this.topList, "topCache", this.solvedPuzzlePieces[0][y - 1].bottomCache);
+			const puzzlePiece = this.isPng
+				? PuzzleManager.binarySearch(this.topList, "topCache", this.solvedPuzzlePieces[0][y - 1].bottomCache)
+				: PuzzleManager.findPuzzlePieceByHammingDistance(this.topList, "topCache", this.solvedPuzzlePieces[0][y - 1], "bottomCache");
 
 			if(puzzlePiece === undefined) {
 				console.error(`Puzzle piece ${y} wasn't found!`);
@@ -126,8 +124,10 @@ class PuzzleManager {
 	private findPuzzlePiecesRowByRow() {
 		for(let y = 0; y < this.puzzleSize; y++) {
 			for(let x = 1; x < this.puzzleSize; x++) {
-				const puzzlePiece = PuzzleManager.binarySearch(this.leftList, "leftCache", this.solvedPuzzlePieces[x - 1][y].rightCache);
-	
+				const puzzlePiece = this.isPng
+					? PuzzleManager.binarySearch(this.leftList, "leftCache", this.solvedPuzzlePieces[x - 1][y].rightCache)
+					: PuzzleManager.findPuzzlePieceByHammingDistance(this.leftList, "leftCache", this.solvedPuzzlePieces[x - 1][y], "rightCache");
+
 				if(puzzlePiece === undefined) {
 					console.error(`Puzzle piece ${x}-${y} wasn't found!`);
 					return;
@@ -145,9 +145,15 @@ class PuzzleManager {
 			for(let x = 0; x < this.puzzleSize; x++) {
 				var puzzlePieceImage = this.solvedPuzzlePieces[x][y].image;
 
+				var offsetX = x - 1;
+				var offsetY = y - 1;
+
+				if(offsetX < 0) offsetX = 0;
+				if(offsetY < 0) offsetY = 0;
+
 				var konvaImage = new Konva.Image({
-					x: x * (this.maxPuzzlePieceWidth - 2),
-					y: y * (this.maxPuzzlePieceHeight - 2),
+					x: x * (this.maxPuzzlePieceWidth - 2) + offsetX,
+					y: y * (this.maxPuzzlePieceHeight - 2) + offsetY,
 					image: puzzlePieceImage,
 					width: puzzlePieceImage.naturalWidth,
 					height: puzzlePieceImage.naturalHeight
@@ -164,7 +170,7 @@ class PuzzleManager {
 		const middleIndex: number = Math.floor(array.length / 2);
 		const middleValue: PuzzlePiece = array[middleIndex];
 
-		const comparison: number = middleValue[propertyName].localeCompare(key);
+		const comparison: number = (middleValue![propertyName as keyof PuzzlePiece]! as string).localeCompare(key);
 
 		if (comparison === 0) return middleValue;
 		if (array.length <= 1) return undefined;
@@ -172,6 +178,44 @@ class PuzzleManager {
 		if (comparison < 0) return PuzzleManager.binarySearch(array.slice(middleIndex), propertyName, key);
 		else return PuzzleManager.binarySearch(array.slice(0, middleIndex), propertyName, key)
 	}
+
+	static findPuzzlePieceByHammingDistance(array: Array<PuzzlePiece>, propertyName: string, target: PuzzlePiece, targetPropertyName: string): PuzzlePiece | undefined {
+
+		let lowestDistance = 999999999;
+		let puzzlePieceWithLowestDistance = undefined;
+
+		for(let i = 0; i < array.length; i++) {
+			const puzzlePiece = array[i];
+
+			if(puzzlePiece === target) continue;
+
+			const distance = PuzzleManager.hammingDistance(
+				puzzlePiece![propertyName as keyof PuzzlePiece] as string,
+				target![targetPropertyName as keyof PuzzlePiece] as string
+			);
+
+			if(distance < lowestDistance) {
+				lowestDistance = distance;
+				puzzlePieceWithLowestDistance = puzzlePiece;
+			}
+		}
+
+		return puzzlePieceWithLowestDistance;
+	}
+
+	static hammingDistance(string1: string = '', string2: string = '') {
+		if (string1.length !== string2.length) return 999999999;
+
+		let distance = 0;
+		for (let i = 0; i < string1.length; i++) {
+			let charCode1 = string1.charCodeAt(i);
+			let charCode2 = string2.charCodeAt(i);
+			
+			distance += Math.abs(charCode1 - charCode2);
+		};
+
+		return distance;
+	 };
 
 }
 

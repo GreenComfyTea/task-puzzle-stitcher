@@ -3,8 +3,6 @@ import PuzzleManager from "./PuzzleManager";
 const { createCanvas, loadImage } = require('canvas');
 
 class PuzzlePiece {
-	private puzzleManager: PuzzleManager;
-
     public image: HTMLImageElement;
 
 	public index: number = 0;
@@ -20,6 +18,8 @@ class PuzzlePiece {
 	public top: ImageData | null = null;
 	public right: ImageData | null = null;
 	public bottom: ImageData | null = null;
+
+	private puzzleManager: PuzzleManager;
 
 	constructor(puzzleManager: PuzzleManager, image: HTMLImageElement, index: number) {
 		this.puzzleManager = puzzleManager;
