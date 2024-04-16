@@ -62,10 +62,6 @@ for(let i = 0; i < 100; i++) {
 const t1 = performance.now();
 
 console.log(`${(t1 -t0)} ms`);
-
-
-this.drawSolvedPuzzle();
-
 ```
 
 `PNG String`: 55 ms
