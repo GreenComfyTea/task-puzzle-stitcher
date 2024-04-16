@@ -86,57 +86,56 @@ export default function ClientPage() {
 			width: stageWidth,
 			height: stageHeight,
 			// Panning
-			draggable: true,
-			scale: { x: 1, y: 1 }
+			draggable: true
 		});
 
-		// // Resize canvas on window resize
-		// window.addEventListener('resize', () => {
-		// 	// We need to fit stage into parent container
-		// 	var containerWidth = canvasContainerElement!.offsetWidth;
+		// Resize canvas on window resize
+		window.addEventListener('resize', () => {
+			// We need to fit stage into parent container
+			var containerWidth = canvasContainerElement!.offsetWidth;
 				
-		// 	// Scale all objects on canvas
-		// 	var scale = containerWidth / stageWidth;
+			// Scale all objects on canvas
+			var scale = containerWidth / stageWidth;
 
-		// 	stage.width(stageWidth * scale);
-		// 	stage.height(canvasContainerElement!.offsetHeight);
-		// 	stage.scale({ x: scale, y: scale });
-		// });
+			stage.width(stageWidth * scale);
+			stage.height(canvasContainerElement!.offsetHeight);
+			stage.scale({ x: scale, y: scale });
+		});
 
 		// Zooming
-		// var scaleBy = 1.25;
-		// stage.on('wheel', (e) => {
-		//   // Stop default scrolling
-		//   e.evt.preventDefault();
+		var scaleBy = 1.25;
+		stage.on('wheel', (e) => {
+		  // Stop default scrolling
+		  e.evt.preventDefault();
   
-		//   var oldScale = stage.scaleX();
-		//   var pointer = stage.getPointerPosition();
+		  var oldScale = stage.scaleX();
+		  var pointer = stage.getPointerPosition();
   
-		//   var mousePointTo = {
-		// 	x: (pointer!.x - stage.x()) / oldScale,
-		// 	y: (pointer!.y - stage.y()) / oldScale,
-		//   };
+		  var mousePointTo = {
+			x: (pointer!.x - stage.x()) / oldScale,
+			y: (pointer!.y - stage.y()) / oldScale,
+		  };
   
-		//   // How to scale? Zoom in? Or zoom out?
-		//   let direction = e.evt.deltaY > 0 ? -1 : 1;
+		  // How to scale? Zoom in? Or zoom out?
+		  let direction = e.evt.deltaY > 0 ? -1 : 1;
   
-		//   // When we zoom on trackpad, e.evt.ctrlKey is true
-		//   // In that case lets revert direction
-		//   if (e.evt.ctrlKey) {
-		// 	direction = -direction;
-		//   }
+		  // When we zoom on trackpad, e.evt.ctrlKey is true
+		  // In that case lets revert direction
+		  if (e.evt.ctrlKey) {
+			direction = -direction;
+		  }
   
-		//   var newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
+		  var newScale = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
   
-		//   stage.scale({ x: newScale, y: newScale });
+		  stage.scale({ x: newScale, y: newScale });
   
-		//   var newPos = {
-		// 	x: pointer!.x - mousePointTo.x * newScale,
-		// 	y: pointer!.y - mousePointTo.y * newScale,
-		//   };
+		  var newPos = {
+			x: pointer!.x - mousePointTo.x * newScale,
+			y: pointer!.y - mousePointTo.y * newScale,
+		  };
 
-		//   stage.position(newPos);
-		// });
+		  stage.position(newPos);
+		});
 
 		puzzleLayer = new Konva.Layer();
 		stage.add(puzzleLayer);

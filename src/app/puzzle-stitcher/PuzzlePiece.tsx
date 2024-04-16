@@ -14,11 +14,6 @@ class PuzzlePiece {
 	public rightCache: string = "";
 	public bottomCache: string = "";
 
-	public left: ImageData | null = null;
-	public top: ImageData | null = null;
-	public right: ImageData | null = null;
-	public bottom: ImageData | null = null;
-
 	private puzzleManager: PuzzleManager;
 
 	constructor(puzzleManager: PuzzleManager, image: HTMLImageElement, index: number) {
@@ -49,7 +44,7 @@ class PuzzlePiece {
 		const topImageData: ImageData = canvasContext.getImageData(0, 0, width, 1);
 		const rightImageData: ImageData = canvasContext.getImageData(width - 1, 0, 1, height);
 		const bottomImageData: ImageData = canvasContext.getImageData(0, height - 1, width, 1);
-		
+
 		// Left Cache
 		for(let y = 0; y < leftImageData.height; y++) {
 			const rgbaInt: number = PuzzlePiece.getPixelFromIndex(leftImageData, y);
