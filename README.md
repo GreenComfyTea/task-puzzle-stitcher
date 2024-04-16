@@ -1,5 +1,7 @@
 # Puzzle Stitcher
 
+**[Job application task](https://github.com/GreenComfyTea/task-puzzle-stitcher/files/14995431/Task_-_Puzzle_stitcher-1.pdf)**.
+
 ## Getting Started
 
 First, run the development server:
