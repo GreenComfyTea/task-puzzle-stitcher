@@ -1,5 +1,3 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
 
 First, run the development server:
@@ -14,23 +12,37 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+or with included `npm_run_dev.bat` script.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open [http://localhost:3000](http://localhost:3000) with your browser.
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
+## Base Algorithm
 
-To learn more about Next.js, take a look at the following resources:
+### Loading:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. Load all images;
+2. Get pixel edges for each image;
+3. `png only` Convert each edge to a string (measurements showed that searching and comparisons with strings turned out to be faster that the same with integers (possibly, due to jit?));
+4. `png only` Create 4 lists containing all images, but each list is sorted differently: leftList, topList, rightList, bottomList. LeftList is sorted by top edge strings, and so on.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Solving:
 
-## Deploy on Vercel
+1. Find top-left image by width and height (it's the only 240x135 image);
+2. Fill left-most column by comparing image candidate top edge string to the above image's bottom edge string.  
+`png only` Due to having sorted lists, binary search is used here for performance.  
+`jpg only` Due to jpg being lossy, I can't compare edges directly. Instead hamming distance is calculated.  
+3. Fill each row  top to bottom, left to right, by comparing image candidate left edge string to the left image's right edge string. Same approach as in step 2.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Additional Features:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. Canvas panning and zooming;
+2. Canvas autoresizing on window resize;
+3. Image format combobox is saved across sessions in `Local Storage`.
+
+## Issues:
+
+1. Both png and jpg algorithms are not safe from collision;
+2. `jpg` processing is 64 times slower than `png` processing.
+
