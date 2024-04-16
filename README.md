@@ -1,3 +1,5 @@
+# Puzzle Stitcher
+
 ## Getting Started
 
 First, run the development server:
