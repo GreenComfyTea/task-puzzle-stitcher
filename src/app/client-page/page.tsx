@@ -6,7 +6,6 @@ import React, { useState, useEffect } from 'react';
 import Konva from "konva";
 
 import PuzzleManager from "../puzzle-stitcher/PuzzleManager";
-import { ok } from 'assert';
 
 export default function ClientPage() {
 	let puzzleLayer: Konva.Layer | undefined = undefined;

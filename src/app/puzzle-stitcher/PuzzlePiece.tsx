@@ -1,6 +1,6 @@
 import PuzzleManager from "./PuzzleManager";
 
-const { createCanvas, loadImage } = require('canvas');
+const { createCanvas } = require('canvas');
 
 class PuzzlePiece {
     public image: HTMLImageElement;
