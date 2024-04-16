@@ -22,6 +22,12 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
+## Additional Dependancies
+
+1. `Pico.css` - UI styling;
+2. `Konva.js` - canvas handling;
+3. `node-canvas` - canvas handling;
+
 ## Base Algorithm
 
 ### Loading:
