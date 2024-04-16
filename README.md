@@ -48,7 +48,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 ## Issues:
 
 1. Both png and jpg algorithms are not safe from collisions;
-2. `jpg` processing is 64 times slower than `png` processing.
+2. `jpg` processing is 63 times slower than `png` processing.
 
 ## Measurements:
 
