@@ -85,6 +85,9 @@ export default function ClientPage() {
 			container: "canvas-container",   // id of container <div>
 			width: stageWidth,
 			height: stageHeight,
+			x: 180,
+			y: 32,
+			scale: { x: 0.4, y: 0.4 },
 			// Panning
 			draggable: true
 		});
