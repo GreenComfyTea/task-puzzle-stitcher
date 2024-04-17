@@ -4,16 +4,18 @@
 
 ## Getting Started
 
-First, run the development server:
+First, install dependencies:
+
+```bash
+npm install
+```
+
+or with included `npm_install.bat` script.
+
+Then run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 or with included `npm_run_dev.bat` script.
@@ -21,6 +23,9 @@ or with included `npm_run_dev.bat` script.
 Open [http://localhost:3000](http://localhost:3000) with your browser.
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+
+>**:pushpin: `ReferenceError: localStorage is not defined` error can be ignored.
+
 
 ## Additional Dependancies
 
