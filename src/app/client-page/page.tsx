@@ -39,6 +39,7 @@ export default function ClientPage() {
 	
 		if(storedImageFormat) {
 			selectedImageFormat = storedImageFormat;
+			imageFormatDropdownElement!.value = selectedImageFormat;
 		}
 
 	}
@@ -76,6 +77,8 @@ export default function ClientPage() {
 		imageFormatDropdownElement = document.getElementById("image-format-dropdown") as HTMLSelectElement;
 		solvePuzzleButtonElement = document.getElementById("solve-puzzle-button") as HTMLButtonElement;
 		canvasContainerElement = document.getElementById("canvas-container") as HTMLElement;
+
+		loadUserDataFromLocalStorage();
 
 		var stageWidth = canvasContainerElement.offsetWidth;
 		var stageHeight = canvasContainerElement.offsetHeight;
@@ -143,8 +146,6 @@ export default function ClientPage() {
 		stage.add(puzzleLayer);
 		puzzleLayer.draw();
 	}, []);
-
-	loadUserDataFromLocalStorage();
 
 	return (
 		<div>

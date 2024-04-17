@@ -24,9 +24,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
->**:pushpin: `ReferenceError: localStorage is not defined` error can be ignored.**
-
-
 ## Additional Dependancies
 
 1. `Pico.css` - UI styling;
